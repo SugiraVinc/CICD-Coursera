@@ -1,26 +1,39 @@
 # .tekton/tasks.yml
-apiVersion: tekton.dev/v1beta1
-kind: Task
-metadata:
-  name: cleanup-task
-spec:
-  steps:
-    - name: cleanup
-      image: alpine
-      script: |
-        #!/bin/sh
-        echo "Cleanup task completed!"
+# This file defines Tekton tasks for the CI/CD pipeline
 
 ---
+# Task 1: Cleanup Task
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: nose-test-task
+  name: cleanup-task # Name of the task
 spec:
   steps:
-    - name: run-tests
-      image: python:3.9
+    # Step 1: Cleanup step
+    - name: cleanup
+      image: alpine # Lightweight image for shell scripts
       script: |
         #!/bin/sh
-        echo "Running tests..."
-        python app.py
+        echo "Performing cleanup..."
+        # Add any necessary cleanup commands here
+        rm -rf /tmp/* # Example: Clean temporary files
+        echo "Cleanup completed successfully!"
+
+---
+# Task 2: Nose Test Task
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: nose-test-task # Name of the task
+spec:
+  steps:
+    # Step 1: Run tests using Nose
+    - name: run-nose-tests
+      image: python:3.9 # Python image with version 3.9
+      script: |
+        #!/bin/sh
+        echo "Installing dependencies..."
+        pip install --upgrade pip # Ensure pip is up to date
+        pip install nose # Install Nose testing framework
+        echo "Running tests with Nose..."
+        nosetests -v # Run Nose tests in verbose mode
