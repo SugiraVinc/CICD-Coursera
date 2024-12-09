@@ -15,12 +15,28 @@ spec:
       script: |
         #!/bin/sh
         echo "Performing cleanup..."
-        # Add any necessary cleanup commands here
-        rm -rf /tmp/* # Example: Clean temporary files
+        rm -rf /tmp/*
         echo "Cleanup completed successfully!"
 
 ---
-# Task 2: Nose Test Task
+# Task 2: Build Task
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-task # Name of the task
+spec:
+  steps:
+    # Step 1: Build step
+    - name: build
+      image: python:3.9
+      script: |
+        #!/bin/sh
+        echo "Building application..."
+        python -m compileall app.py
+        echo "Build completed successfully!"
+
+---
+# Task 3: Nose Test Task
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
@@ -29,11 +45,11 @@ spec:
   steps:
     # Step 1: Run tests using Nose
     - name: run-nose-tests
-      image: python:3.9 # Python image with version 3.9
+      image: python:3.9
       script: |
         #!/bin/sh
         echo "Installing dependencies..."
-        pip install --upgrade pip # Ensure pip is up to date
-        pip install nose # Install Nose testing framework
+        pip install --upgrade pip
+        pip install nose
         echo "Running tests with Nose..."
-        nosetests -v # Run Nose tests in verbose mode
+        nosetests -v

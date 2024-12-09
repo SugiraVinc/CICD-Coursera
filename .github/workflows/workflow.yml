@@ -34,8 +34,8 @@ jobs:
       - name: Lint with Flake8
         run: flake8 .
 
-  # Job for running unit tests
-  test:
+  # Job for building and running unit tests
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       # Step 1: Checkout the repository code
@@ -54,8 +54,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install nose
 
-      # Step 4: Run unit tests using Nose
+      # Step 4: Build application
+      - name: Build Application
+        run: |
+          echo "Building application..."
+          # Simulate a build step
+          python -m compileall app.py
+
+      # Step 5: Run unit tests using Nose
       - name: Run unit tests with Nose
         run: |
-          # Run Nose tests in verbose mode
           nosetests -v
